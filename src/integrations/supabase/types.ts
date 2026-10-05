@@ -175,6 +175,45 @@ export type Database = {
         }
         Relationships: []
       }
+      withdrawals: {
+        Row: {
+          admin_note: string | null
+          amount_kes: number
+          amount_usd: number
+          created_at: string
+          id: string
+          mpesa_phone: string
+          mpesa_receipt: string | null
+          reviewed_at: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          admin_note?: string | null
+          amount_kes: number
+          amount_usd: number
+          created_at?: string
+          id?: string
+          mpesa_phone: string
+          mpesa_receipt?: string | null
+          reviewed_at?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          admin_note?: string | null
+          amount_kes?: number
+          amount_usd?: number
+          created_at?: string
+          id?: string
+          mpesa_phone?: string
+          mpesa_receipt?: string | null
+          reviewed_at?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -182,6 +221,15 @@ export type Database = {
     Functions: {
       admin_review_kyc: {
         Args: { _approve: boolean; _feedback: string; _user_id: string }
+        Returns: undefined
+      }
+      admin_review_withdrawal: {
+        Args: {
+          _approve: boolean
+          _id: string
+          _note: string
+          _receipt: string
+        }
         Returns: undefined
       }
       complete_task: {
@@ -194,6 +242,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      request_withdrawal: {
+        Args: { _amount_usd: number; _phone: string }
+        Returns: string
       }
       submit_kyc: {
         Args: {
