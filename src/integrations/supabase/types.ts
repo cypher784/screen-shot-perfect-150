@@ -14,16 +14,199 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          balance_usd: number
+          batch_count: number
+          bio: string | null
+          contributor_level: number
+          cooldown_until: string | null
+          created_at: string
+          current_streak: number
+          email: string
+          id: string
+          is_vip: boolean
+          kyc_back_path: string | null
+          kyc_doc_type: string | null
+          kyc_face_path: string | null
+          kyc_feedback: string | null
+          kyc_front_path: string | null
+          kyc_status: string
+          last_active_date: string | null
+          location: string
+          mpesa_reg_code: string | null
+          phone: string | null
+          referral_code: string
+          selected_language: string
+          tasks_completed: number
+          total_earned_usd: number
+          username: string
+        }
+        Insert: {
+          balance_usd?: number
+          batch_count?: number
+          bio?: string | null
+          contributor_level?: number
+          cooldown_until?: string | null
+          created_at?: string
+          current_streak?: number
+          email: string
+          id: string
+          is_vip?: boolean
+          kyc_back_path?: string | null
+          kyc_doc_type?: string | null
+          kyc_face_path?: string | null
+          kyc_feedback?: string | null
+          kyc_front_path?: string | null
+          kyc_status?: string
+          last_active_date?: string | null
+          location?: string
+          mpesa_reg_code?: string | null
+          phone?: string | null
+          referral_code: string
+          selected_language?: string
+          tasks_completed?: number
+          total_earned_usd?: number
+          username: string
+        }
+        Update: {
+          balance_usd?: number
+          batch_count?: number
+          bio?: string | null
+          contributor_level?: number
+          cooldown_until?: string | null
+          created_at?: string
+          current_streak?: number
+          email?: string
+          id?: string
+          is_vip?: boolean
+          kyc_back_path?: string | null
+          kyc_doc_type?: string | null
+          kyc_face_path?: string | null
+          kyc_feedback?: string | null
+          kyc_front_path?: string | null
+          kyc_status?: string
+          last_active_date?: string | null
+          location?: string
+          mpesa_reg_code?: string | null
+          phone?: string | null
+          referral_code?: string
+          selected_language?: string
+          tasks_completed?: number
+          total_earned_usd?: number
+          username?: string
+        }
+        Relationships: []
+      }
+      task_completions: {
+        Row: {
+          created_at: string
+          id: string
+          prompt_id: string
+          reward_usd: number
+          translation: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          prompt_id: string
+          reward_usd?: number
+          translation: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          prompt_id?: string
+          reward_usd?: number
+          translation?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_completions_prompt_id_fkey"
+            columns: ["prompt_id"]
+            isOneToOne: false
+            referencedRelation: "task_prompts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      task_prompts: {
+        Row: {
+          created_at: string
+          english_word: string
+          id: string
+          is_approved_pool: boolean
+          target_language: string
+        }
+        Insert: {
+          created_at?: string
+          english_word: string
+          id?: string
+          is_approved_pool?: boolean
+          target_language: string
+        }
+        Update: {
+          created_at?: string
+          english_word?: string
+          id?: string
+          is_approved_pool?: boolean
+          target_language?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      admin_review_kyc: {
+        Args: { _approve: boolean; _feedback: string; _user_id: string }
+        Returns: undefined
+      }
+      complete_task: {
+        Args: { _prompt_id: string; _translation: string }
+        Returns: Json
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      submit_kyc: {
+        Args: {
+          _back: string
+          _doc_type: string
+          _face: string
+          _front: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +333,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
