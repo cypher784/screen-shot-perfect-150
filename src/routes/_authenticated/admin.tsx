@@ -100,6 +100,9 @@ function Admin() {
         </div>
       </section>
 
+      <WithdrawalQueue />
+
+
       <section>
         <div className="flex items-center justify-between gap-3">
           <h2 className="text-lg font-semibold">Users ({list.length})</h2>

@@ -8,7 +8,7 @@
 - [x] Profile page (level, streak, change password)
 - [x] Earnings charts
 - [ ] Peer audit queue
-- [ ] M-Pesa withdrawals + admin approval
+- [x] M-Pesa withdrawals + admin approval (manual payout)
 - [ ] Support tickets
 - [ ] Leaderboard
 - [x] AI translation checker (accuracy + improvement tips)
