@@ -31,6 +31,12 @@ export function Header() {
               <Link to="/dashboard" className="px-2 text-muted-foreground hover:text-foreground">
                 Dashboard
               </Link>
+              <Link to="/profile" className="px-2 text-muted-foreground hover:text-foreground">
+                Profile
+              </Link>
+              <Link to="/withdraw" className="px-2 text-muted-foreground hover:text-foreground">
+                Withdraw
+              </Link>
               <Link to="/checker" className="px-2 text-muted-foreground hover:text-foreground">
                 Checker
               </Link>
