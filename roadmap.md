@@ -11,5 +11,5 @@
 - [ ] M-Pesa withdrawals + admin approval
 - [ ] Support tickets
 - [ ] Leaderboard
-- [ ] AI translation checker (accuracy + improvement tips)
-- [ ] KYC approved/rejected emails (with rejection note)
+- [x] AI translation checker (accuracy + improvement tips)
+- [ ] KYC approved/rejected emails (with rejection note) — blocked: needs email domain setup
