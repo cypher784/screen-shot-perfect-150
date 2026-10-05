@@ -13,3 +13,5 @@
 - [ ] Leaderboard
 - [x] AI translation checker (accuracy + improvement tips)
 - [ ] KYC approved/rejected emails (with rejection note) — blocked: needs email domain setup
+- [ ] Browser-test Checker signed in (score, verdict, tips)
+- [ ] Replace starter words with user's real list — blocked: waiting for the list
