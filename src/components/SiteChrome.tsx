@@ -31,6 +31,9 @@ export function Header() {
               <Link to="/dashboard" className="px-2 text-muted-foreground hover:text-foreground">
                 Dashboard
               </Link>
+              <Link to="/checker" className="px-2 text-muted-foreground hover:text-foreground">
+                Checker
+              </Link>
               {me.isAdmin && (
                 <Link to="/admin" className="px-2 text-accent hover:text-foreground">
                   Admin
