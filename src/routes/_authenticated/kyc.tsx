@@ -18,7 +18,7 @@ const DOCS = ["National ID Card", "Driver License", "Military ID Card", "Birth C
 function Kyc() {
   const { data: me } = useMe();
   const qc = useQueryClient();
-  const [doc, setDoc] = useState(DOCS[0]);
+  const [doc, setDoc] = useState<string>("National ID Card");
   const [files, setFiles] = useState<{ front?: File; back?: File; face?: File }>({});
   const [busy, setBusy] = useState(false);
   const p = me?.profile;
