@@ -38,7 +38,7 @@ function AuthPage() {
     try {
       if (mode === "up") {
         const parsed = signupSchema.safeParse(form);
-        if (!parsed.success) return toast.error(parsed.error.issues[0].message);
+        if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Invalid input"); return; }
         const { error } = await supabase.auth.signUp({
           email: form.email,
           password: form.password,
@@ -47,12 +47,12 @@ function AuthPage() {
             data: { username: form.username, selected_language: form.language },
           },
         });
-        if (error) return toast.error(error.message);
+        if (error) { toast.error(error.message); return; }
         toast.success("Check your email to confirm your account.");
         setMode("in");
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email: form.email, password: form.password });
-        if (error) return toast.error(error.message);
+        if (error) { toast.error(error.message); return; }
         navigate({ to: "/dashboard" });
       }
     } finally {

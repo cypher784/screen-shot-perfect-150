@@ -46,13 +46,13 @@ function Kyc() {
   };
 
   const submit = async () => {
-    if (!files.front || !files.face || (needsBack && !files.back)) return toast.error("Please upload all required files");
+    if (!files.front || !files.face || (needsBack && !files.back)) { toast.error("Please upload all required files"); return; }
     setBusy(true);
     try {
       const front = await upload(files.front, "front");
       const back = needsBack && files.back ? await upload(files.back, "back") : null;
       const face = await upload(files.face, "face");
-      const { error } = await supabase.rpc("submit_kyc", { _doc_type: doc, _front: front, _back: back as string, _face: face });
+      const { error } = await supabase.rpc("submit_kyc", { _doc_type: doc, _front: front, _back: back as unknown as string, _face: face });
       if (error) throw error;
       toast.success("Submitted for review");
       qc.invalidateQueries({ queryKey: ["me"] });

@@ -32,23 +32,23 @@ function Admin() {
   const openFile = async (path: string | null) => {
     if (!path) return;
     const { data, error } = await supabase.storage.from("kyc").createSignedUrl(path, 120);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     window.open(data.signedUrl, "_blank", "noopener");
   };
 
   const review = async (id: string, approve: boolean) => {
-    if (!approve && !notes[id]?.trim()) return toast.error("Add a rejection note");
+    if (!approve && !notes[id]?.trim()) { toast.error("Add a rejection note"); return; }
     const { error } = await supabase.rpc("admin_review_kyc", { _user_id: id, _approve: approve, _feedback: notes[id] ?? "" });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(approve ? "Verified" : "Rejected");
     qc.invalidateQueries({ queryKey: ["admin-users"] });
   };
 
   const addPrompt = async () => {
     const w = word.trim();
-    if (!w || w.length > 200) return toast.error("Enter a prompt (max 200 chars)");
+    if (!w || w.length > 200) { toast.error("Enter a prompt (max 200 chars)"); return; }
     const { error } = await supabase.from("task_prompts").insert({ english_word: w, target_language: lang });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Prompt added");
     setWord("");
   };

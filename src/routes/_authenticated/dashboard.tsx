@@ -52,9 +52,9 @@ function Dashboard() {
 
   const submit = async (id: string) => {
     const t = (answers[id] ?? "").trim();
-    if (!t) return toast.error("Enter your translation");
+    if (!t) { toast.error("Enter your translation"); return; }
     const { error } = await supabase.rpc("complete_task", { _prompt_id: id, _translation: t });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("+$0.25 earned");
     qc.invalidateQueries();
   };
