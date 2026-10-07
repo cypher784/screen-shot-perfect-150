@@ -130,3 +130,50 @@ function Admin() {
     </main>
   );
 }
+
+function WithdrawalQueue() {
+  const qc = useQueryClient();
+  const [notes, setNotes] = useState<Record<string, string>>({});
+  const [receipts, setReceipts] = useState<Record<string, string>>({});
+  const q = useQuery({
+    queryKey: ["admin-withdrawals"],
+    queryFn: async () =>
+      (await supabase.from("withdrawals").select("*").eq("status", "Pending").order("created_at", { ascending: true })).data ?? [],
+  });
+
+  const act = async (id: string, approve: boolean) => {
+    if (approve && !receipts[id]?.trim()) { toast.error("Enter the M-Pesa receipt code"); return; }
+    if (!approve && !notes[id]?.trim()) { toast.error("Add a rejection note"); return; }
+    const { error } = await supabase.rpc("admin_review_withdrawal", {
+      _id: id, _approve: approve, _note: notes[id] ?? "", _receipt: receipts[id] ?? "",
+    });
+    if (error) { toast.error(error.message); return; }
+    toast.success(approve ? "Marked as paid" : "Rejected and refunded");
+    qc.invalidateQueries({ queryKey: ["admin-withdrawals"] });
+    qc.invalidateQueries({ queryKey: ["admin-users"] });
+  };
+
+  const rows = q.data ?? [];
+  return (
+    <section>
+      <h2 className="text-lg font-semibold">Withdrawal queue ({rows.length})</h2>
+      <div className="mt-4 space-y-3">
+        {rows.length === 0 && <p className="text-sm text-muted-foreground">No pending withdrawals.</p>}
+        {rows.map((w) => (
+          <div key={w.id} className="rounded-xl border border-border bg-card p-5">
+            <p className="font-semibold">
+              ${Number(w.amount_usd).toFixed(2)} · KES {Number(w.amount_kes)} → {w.mpesa_phone}
+            </p>
+            <p className="text-xs text-muted-foreground">{new Date(w.created_at).toLocaleString()}</p>
+            <div className="mt-3 grid gap-2 sm:grid-cols-[1fr_1fr_auto_auto]">
+              <Input placeholder="M-Pesa receipt code" value={receipts[w.id] ?? ""} onChange={(e) => setReceipts({ ...receipts, [w.id]: e.target.value })} />
+              <Input placeholder="Note (required to reject)" value={notes[w.id] ?? ""} onChange={(e) => setNotes({ ...notes, [w.id]: e.target.value })} />
+              <Button variant="success" onClick={() => act(w.id, true)}>Mark paid</Button>
+              <Button variant="destructive" onClick={() => act(w.id, false)}>Reject</Button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
